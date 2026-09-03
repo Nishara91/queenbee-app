@@ -1,5 +1,8 @@
 "use client";
 import { useState } from 'react';
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+// ඔයාගේ firebase.ts ෆයිල් එක තියෙන තැනට path එක හරියටම දෙන්න
+import { db } from "../../firebase"; 
 
 // Contact Form Component with Pure Black Glassmorphism Design
 export default function ContactForm() {
@@ -24,33 +27,31 @@ export default function ContactForm() {
         };
 
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/inquiries', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(data)
+            // Firebase Firestore එකට දත්ත යැවීම
+            await addDoc(collection(db, "inquiries"), {
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                message: data.message,
+                services: data.services,
+                products: data.products,
+                createdAt: serverTimestamp() // යවන වෙලාවත් සේව් වෙනවා
             });
 
-            if (response.ok) {
-                setStatus({ text: "Thank you! We have received your inquiry and will contact you shortly.", type: "success" });
-                form.reset();
-            } else {
-                setStatus({ text: "Something went wrong. Please try again.", type: "error" });
-            }
+            setStatus({ text: "Thank you! We have received your inquiry and will contact you shortly.", type: "success" });
+            form.reset();
+            
         } catch (error) {
-            setStatus({ text: "Server error. Please check if the backend is running.", type: "error" });
+            console.error("Error adding document: ", error);
+            setStatus({ text: "Something went wrong. Please check your Firebase configuration.", type: "error" });
         }
     };
 
     return (
         <section id="contact" className="relative py-24 px-6 bg-cover bg-center bg-fixed overflow-hidden" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1512428559087-560fa5ceab42?q=80&w=2070&auto=format&fit=crop')" }}>
             
-            {/* පින්තූරේ උඩින් වැටෙන තද කළු පාට Overlay එක */}
             <div className="absolute inset-0 bg-black/90"></div>
             
-            {/* Form Container */}
             <div data-aos="fade-up" data-aos-duration="1000" className="relative z-10 max-w-4xl mx-auto bg-black/40 backdrop-blur-xl p-8 md:p-12 rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border border-gray-800/60">
                 <h2 data-aos="fade-down" data-aos-delay="100" className="text-3xl md:text-4xl font-bold text-center text-white mb-10">Start Your Project</h2>
                 
@@ -74,7 +75,6 @@ export default function ContactForm() {
                     {/* Services & Products Checklist */}
                     <div data-aos="fade-up" data-aos-delay="500" className="bg-black/50 p-6 rounded-xl mt-6 border border-gray-800">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {/* Services Column */}
                             <div>
                                 <h3 className="font-bold text-yellow-500 mb-4 tracking-wide text-sm uppercase">Services</h3>
                                 <div className="space-y-3 text-sm text-gray-300 font-medium">
@@ -91,7 +91,6 @@ export default function ContactForm() {
                                 </div>
                             </div>
 
-                            {/* Products Column */}
                             <div>
                                 <h3 className="font-bold text-yellow-500 mb-4 tracking-wide text-sm uppercase">Products</h3>
                                 <div className="space-y-3 text-sm text-gray-300 font-medium">
