@@ -37,10 +37,10 @@ export default function Portfolio() {
                         </div>
                     </div>
 
-                    {/* Project 3 */}
+                    {/* Project 3 - අලුත් පින්තූරේ ලින්ක් එක දැම්මා */}
                     <div data-aos="zoom-in-up" data-aos-delay="300" className="group relative overflow-hidden rounded-2xl bg-gray-900 border border-gray-800 shadow-xl">
                         <div className="aspect-video overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1533750349077-cdcd1ec24467?q=80&w=2070&auto=format&fit=crop" alt="Project 3" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                            <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=2074&auto=format&fit=crop" alt="Project 3" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                         </div>
                         <div className="p-6">
                             <span className="text-xs font-semibold text-yellow-500 uppercase tracking-wider">Social Media</span>
