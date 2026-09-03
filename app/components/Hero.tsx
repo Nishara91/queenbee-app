@@ -8,7 +8,7 @@ export default function Hero() {
                 <div className="absolute -bottom-1/2 -left-1/4 w-[800px] h-[800px] rounded-full bg-yellow-500/10 blur-[100px]"></div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-6 relative z-10 w-full grid md:grid-cols-2 gap-12 items-center">
+            <div className="max-w-7xl mx-auto px-6 relative z-10 w-full grid md:grid-cols-2 gap-12 items-center py-12 md:py-0">
                 
                 {/* වම් පැත්ත: Text Content */}
                 <div className="text-left">
@@ -35,25 +35,25 @@ export default function Hero() {
                     </div>
                 </div>
 
-                {/* දකුණු පැත්ත: Image / Graphic */}
-                <div className="hidden md:flex justify-center relative">
-                    <div data-aos="zoom-in" data-aos-delay="200" className="relative w-full aspect-square max-w-md">
+                {/* දකුණු පැත්ත: Image / Graphic (දැන් ෆෝන් එකටත් පේනවා) */}
+                <div className="flex justify-center relative mt-12 md:mt-0">
+                    <div data-aos="zoom-in" data-aos-delay="200" className="relative w-full aspect-square max-w-sm md:max-w-md">
                         {/* පිටිපස්සේ තියෙන shadow/glow එක */}
                         <div className="absolute inset-0 bg-gradient-to-tr from-yellow-600 to-yellow-300 rounded-[3rem] rotate-6 opacity-20 blur-2xl"></div>
                         
                         {/* ලැප්ටොප් පින්තූරේ වෙනුවට දාපු ලෝගෝ එක */}
-                        <div className="relative z-10 w-full h-full bg-gray-800/40 backdrop-blur-sm rounded-[2rem] shadow-2xl border border-gray-700/50 flex items-center justify-center p-12">
+                        <div className="relative z-10 w-full h-full bg-gray-800/40 backdrop-blur-sm rounded-[2rem] shadow-2xl border border-gray-700/50 flex items-center justify-center p-8 md:p-12">
                             <img src="/logo.png" alt="Queen Bee Logo" className="w-full h-full object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500" />
                         </div>
                         
                         {/* පින්තූරේ උඩින් පාවෙන පොඩි Badge එක */}
-                        <div data-aos="fade-up" data-aos-delay="500" className="absolute -bottom-6 -left-6 bg-white text-gray-900 p-4 rounded-xl shadow-xl z-20 flex items-center gap-4 hover:scale-105 transition-transform cursor-default">
-                            <div className="bg-yellow-100 p-3 rounded-full text-yellow-600">
-                                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>
+                        <div data-aos="fade-up" data-aos-delay="500" className="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 bg-white text-gray-900 p-3 md:p-4 rounded-xl shadow-xl z-20 flex items-center gap-3 hover:scale-105 transition-transform cursor-default scale-90 md:scale-100 origin-bottom-left">
+                            <div className="bg-yellow-100 p-2 md:p-3 rounded-full text-yellow-600">
+                                <svg className="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>
                             </div>
                             <div>
-                                <p className="font-bold">Trusted Agency</p>
-                                <p className="text-xs text-gray-500">100+ Projects Delivered</p>
+                                <p className="font-bold text-sm md:text-base">Trusted Agency</p>
+                                <p className="text-[10px] md:text-xs text-gray-500">100+ Projects Delivered</p>
                             </div>
                         </div>
                     </div>
