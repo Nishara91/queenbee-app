@@ -43,7 +43,7 @@ export default function Hero() {
                         
                         {/* ලැප්ටොප් පින්තූරේ වෙනුවට දාපු ලෝගෝ එක */}
                         <div className="relative z-10 w-full h-full bg-gray-800/40 backdrop-blur-sm rounded-[2rem] shadow-2xl border border-gray-700/50 flex items-center justify-center p-12">
-                            <img src="/logo.png" alt="Queen Bee Logo" className="w-full h-full object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500" />
+                            <img src="/Logo.png" alt="Queen Bee Logo" className="w-full h-full object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500" />
                         </div>
                         
                         {/* පින්තූරේ උඩින් පාවෙන පොඩි Badge එක */}
