@@ -16,6 +16,7 @@ export default function AdminPanel() {
                     status: "Pending", // Default status එක Pending විදිහට දෙනවා
                     ...doc.data()
                 }));
+                // @ts-ignore
                 data.sort((a, b) => b.createdAt?.toMillis() - a.createdAt?.toMillis());
                 setInquiries(data);
             } catch (error) {
