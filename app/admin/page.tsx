@@ -52,26 +52,36 @@ export default function AdminPage() {
         }
     };
 
-    // 1. ලොග් වෙලා නැත්නම් පෙන්නන්නේ මේ Login Form එකයි
+    // 1. ලොග් වෙලා නැත්නම් පෙන්නන්නේ මේ අලුත් Premium Login Form එකයි
     if (!isLoggedIn) {
         return (
-            <div className="min-h-screen bg-gray-950 flex items-center justify-center p-6">
-                <div className="max-w-md w-full bg-gray-900 border border-gray-800 p-8 rounded-2xl shadow-2xl">
-                    <h2 className="text-2xl font-bold text-white text-center mb-6">Queen Bee <span className="text-yellow-500">Admin</span></h2>
-                    <form onSubmit={handleLogin} className="space-y-4">
+            <div className="min-h-screen flex items-center justify-center bg-gray-950 relative overflow-hidden" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2029&auto=format&fit=crop')" }}>
+                {/* Background Overlay */}
+                <div className="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
+                
+                {/* Login Card */}
+                <div className="relative z-10 w-full max-w-md p-10 bg-black/40 backdrop-blur-xl border border-gray-700/50 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.6)] mx-4">
+                    <div className="text-center mb-10">
+                        <h2 className="text-3xl font-extrabold text-white tracking-wide">
+                            Queen Bee <span className="text-yellow-500">Admin</span>
+                        </h2>
+                        <p className="text-gray-400 text-sm mt-2">Secure access for authorized personnel</p>
+                    </div>
+                    
+                    <form onSubmit={handleLogin} className="space-y-6">
                         <div>
-                            <label className="block text-sm font-semibold text-gray-400 mb-2">Enter Password</label>
+                            <label className="block text-sm font-semibold text-gray-300 mb-2">Password</label>
                             <input 
                                 type="password" 
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full bg-black/50 border border-gray-700 rounded-lg p-3 text-white focus:border-yellow-500 focus:outline-none"
+                                className="w-full bg-black/50 border border-gray-600 rounded-xl p-4 text-white placeholder-gray-500 focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all outline-none"
                                 placeholder="••••••••"
                                 required 
                             />
                         </div>
-                        <button type="submit" className="w-full bg-yellow-600 text-white font-bold py-3 rounded-lg hover:bg-yellow-500 transition-colors">
-                            Login
+                        <button type="submit" className="w-full bg-gradient-to-r from-yellow-600 to-yellow-500 text-white font-bold py-4 rounded-xl hover:from-yellow-500 hover:to-yellow-400 transition-all shadow-[0_0_20px_rgba(202,138,4,0.3)] transform hover:-translate-y-1">
+                            Secure Login
                         </button>
                     </form>
                 </div>
