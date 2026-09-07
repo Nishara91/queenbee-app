@@ -62,10 +62,16 @@ export default function Portfolio() {
                         No projects available yet. Add some from the Admin Panel!
                     </div>
                 ) : (
-                    /* Portfolio Grid - Firebase එකෙන් එන ඩේටා Loop කිරීම */
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    /* අලුත් Portfolio Gallery Wrapper (Horizontal Scroll) */
+                    <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-10 pt-4 hide-scrollbar">
                         {projects.map((project, index) => (
-                            <div key={project.id} data-aos="zoom-in-up" data-aos-delay={index * 100} className="group relative overflow-hidden rounded-2xl bg-gray-900 border border-gray-800 shadow-xl">
+                            <div 
+                                key={project.id} 
+                                data-aos="zoom-in-up" 
+                                data-aos-delay={index * 100} 
+                                // මෙතන තමයි අලුත් ඩිසයින් එකට අදාල කෑලි ටික තියෙන්නේ
+                                className="snap-center shrink-0 w-[85vw] md:w-[400px] h-full flex flex-col group relative overflow-hidden rounded-2xl bg-gray-900 border border-gray-800 shadow-xl"
+                            >
                                 <div className="aspect-video overflow-hidden relative bg-black">
                                     <img 
                                         src={project.imageUrl} 
@@ -76,7 +82,7 @@ export default function Portfolio() {
                                     />
                                     <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-500"></div>
                                 </div>
-                                <div className="p-6">
+                                <div className="p-6 flex-1 flex flex-col">
                                     <span className="text-xs font-semibold text-yellow-500 uppercase tracking-wider">{project.category}</span>
                                     <h4 className="text-xl font-bold mt-1 mb-2 text-white">{project.title}</h4>
                                     <p className="text-gray-400 text-sm">{project.description}</p>
