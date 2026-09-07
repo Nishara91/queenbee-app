@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FaFacebook } from "react-icons/fa"; // ෆේස්බුක් අයිකන් එකට (react-icons නැත්නම් පල්ලෙහා සටහන බලන්න)
+// ෆේස්බුක් අයිකන් එකට (react-icons)
 
 export default function Footer() {
     return (
@@ -75,10 +75,9 @@ export default function Footer() {
 
             </div>
 
-            {/* Bottom Copyright & Tech Stack */}
-            <div className="max-w-7xl mx-auto border-t border-gray-900 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
-                <p>© 2026 Queen Bee Digital Marketing. All rights reserved.</p>
-                <p className="mt-4 md:mt-0">Designed with Next.js & Tailwind CSS</p>
+            {/* Bottom Copyright (Designed by අයින් කළා, අවුරුද්ද ඉබේ වෙනස් වෙන්න හැදුවා) */}
+            <div className="max-w-7xl mx-auto border-t border-gray-900 pt-8 flex justify-center items-center text-xs text-gray-500">
+                <p>© {new Date().getFullYear()} Queen Bee Digital Marketing. All rights reserved.</p>
             </div>
         </footer>
     );
