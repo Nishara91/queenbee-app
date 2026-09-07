@@ -1,3 +1,5 @@
+import Link from "next/link"; // <--- මේක අලුතින් දැම්මා
+
 // Premium Hero Section Component
 export default function Hero() {
     return (
@@ -23,8 +25,8 @@ export default function Hero() {
                     
                     <p data-aos="fade-up" data-aos-delay="200" className="text-lg md:text-xl text-gray-300 mb-8 font-light leading-relaxed max-w-lg">
                         Empowering brands worldwide with data-driven marketing, innovative web solutions, and creative advertising. We combine cutting-edge technology with strategic thinking to scale your business to the next level.
-                    </p>           
-                             
+                    </p> 
+                    
                     <div data-aos="fade-up" data-aos-delay="300" className="flex flex-col sm:flex-row gap-4">
                         <a href="#contact" className="bg-yellow-600 text-white px-8 py-4 rounded-full font-bold shadow-lg shadow-yellow-600/30 hover:bg-yellow-500 transition-all duration-300 text-center transform hover:-translate-y-1">
                             Start Your Project
@@ -35,19 +37,19 @@ export default function Hero() {
                     </div>
                 </div>
 
-                {/* දකුණු පැත්ත: Image / Graphic (දැන් ෆෝන් එකටත් පේනවා) */}
+                {/* දකුණු පැත්ත: Image / Graphic */}
                 <div className="flex justify-center relative mt-12 md:mt-0">
                     <div data-aos="zoom-in" data-aos-delay="200" className="relative w-full aspect-square max-w-sm md:max-w-md">
                         {/* පිටිපස්සේ තියෙන shadow/glow එක */}
                         <div className="absolute inset-0 bg-gradient-to-tr from-yellow-600 to-yellow-300 rounded-[3rem] rotate-6 opacity-20 blur-2xl"></div>
                         
-                        {/* ලැප්ටොප් පින්තූරේ වෙනුවට දාපු ලෝගෝ එක */}
+                        {/* ලෝගෝ එක */}
                         <div className="relative z-10 w-full h-full bg-gray-800/40 backdrop-blur-sm rounded-[2rem] shadow-2xl border border-gray-700/50 flex items-center justify-center p-8 md:p-12">
                             <img src="/logo.png" alt="Queen Bee Logo" className="w-full h-full object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500" />
                         </div>
                         
-                        {/* පින්තූරේ උඩින් පාවෙන පොඩි Badge එක */}
-                        <div data-aos="fade-up" data-aos-delay="500" className="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 bg-white text-gray-900 p-3 md:p-4 rounded-xl shadow-xl z-20 flex items-center gap-3 hover:scale-105 transition-transform cursor-default scale-90 md:scale-100 origin-bottom-left">
+                        {/* පින්තූරේ උඩින් පාවෙන පොඩි Badge එක (දැන් මේක ක්ලික් කරන්න පුළුවන් Link එකක්) */}
+                        <Link href="/gallery" data-aos="fade-up" data-aos-delay="500" className="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 bg-white text-gray-900 p-3 md:p-4 rounded-xl shadow-xl z-20 flex items-center gap-3 hover:scale-105 transition-transform cursor-pointer scale-90 md:scale-100 origin-bottom-left">
                             <div className="bg-yellow-100 p-2 md:p-3 rounded-full text-yellow-600">
                                 <svg className="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>
                             </div>
@@ -55,7 +57,7 @@ export default function Hero() {
                                 <p className="font-bold text-sm md:text-base">Trusted Agency</p>
                                 <p className="text-[10px] md:text-xs text-gray-500">100+ Projects Delivered</p>
                             </div>
-                        </div>
+                        </Link>
                     </div>
                 </div>
 
