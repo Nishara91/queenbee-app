@@ -25,11 +25,18 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Hide scrollbar for horizontal scroll (Portfolio Gallery) */
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
+/* Continuous Movie Frame (Marquee) Animation */
+@keyframes infinite-scroll {
+  0% { transform: translateX(0); }
+  /* gap-6 කියන්නේ 1.5rem නිසා ඒකත් එකතු කරලා තියෙන්නේ */
+  100% { transform: translateX(calc(-100% - 1.5rem)); } 
 }
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+
+.animate-marquee {
+  animation: infinite-scroll 30s linear infinite;
+}
+
+/* මවුස් එක ගෙනිච්චම නවතින්න (Pause on Hover) */
+.pause-on-hover:hover .animate-marquee {
+  animation-play-state: paused;
 }
