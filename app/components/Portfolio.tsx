@@ -105,11 +105,16 @@ export default function Portfolio() {
     }, []);
 
     return (
-        <section id="portfolio" className="py-24 px-6 bg-gray-950 text-white overflow-hidden">
-            <div className="max-w-7xl mx-auto">
+        <section id="portfolio" className="relative py-24 px-6 bg-cover bg-center bg-fixed overflow-hidden" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop')" }}>
+            
+            {/* Dark Overlay එක */}
+            <div className="absolute inset-0 bg-gray-950/85 backdrop-blur-[2px]"></div>
+
+            <div className="max-w-7xl mx-auto relative z-10">
                 <div className="text-center mb-16">
                     <h2 data-aos="fade-down" className="text-sm font-bold text-yellow-500 uppercase tracking-widest mb-2">Our Work</h2>
-                    <h3 data-aos="fade-up" data-aos-delay="100" className="text-3xl md:text-5xl font-extrabold text-white">Recent Projects</h3>
+                    {/* අකුරු පොඩි කළා (text-5xl වෙනුවට text-4xl දැම්මා) */}
+                    <h3 data-aos="fade-up" data-aos-delay="100" className="text-3xl md:text-4xl font-extrabold text-white">Recent Projects</h3>
                     <p data-aos="fade-up" data-aos-delay="200" className="mt-4 text-gray-400 max-w-2xl mx-auto text-lg">
                         Take a look at some of the real-world projects, businesses, and digital platforms we have successfully managed.
                     </p>
