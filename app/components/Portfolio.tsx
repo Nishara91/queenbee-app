@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 // ඔයාගේ firebase.ts එක තියෙන තැනට path එක හරියටම දෙන්න
 import { db } from "../../firebase"; 
@@ -16,11 +16,15 @@ interface Project {
 export default function Portfolio() {
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
+    
+    // Auto-scroll සඳහා අලුතින් එකතු කරපු State සහ Ref
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const [isHovered, setIsHovered] = useState(false);
 
+    // Firebase එකෙන් ඩේටා ගන්න කොටස
     useEffect(() => {
         const fetchProjects = async () => {
             try {
-                // අලුත්ම Projects මුලින් එන්න order කරනවා
                 const q = query(collection(db, "projects"), orderBy("createdAt", "desc"));
                 const querySnapshot = await getDocs(q);
                 
@@ -39,6 +43,30 @@ export default function Portfolio() {
 
         fetchProjects();
     }, []);
+
+    // Auto-scroll Logic එක
+    useEffect(() => {
+        // මවුස් එක උඩ තියෙද්දි (Hover) හෝ ඩේටා නැත්නම් scroll වෙන්න එපා
+        if (!scrollRef.current || isHovered || projects.length === 0) return;
+
+        const intervalId = setInterval(() => {
+            const container = scrollRef.current;
+            if (container) {
+                // උපරිම දකුණට ගිහිල්ලද බලනවා
+                const maxScrollLeft = container.scrollWidth - container.clientWidth;
+                
+                if (container.scrollLeft >= maxScrollLeft - 10) {
+                    // අන්තිමටම ගියාම ආයෙත් මුලට එනවා
+                    container.scrollTo({ left: 0, behavior: "smooth" });
+                } else {
+                    // තත්පර 3න් 3ට කාඩ් එකක සයිස් එකක් (පික්සල් 400ක් විතර) ඉස්සරහට යනවා
+                    container.scrollBy({ left: 400, behavior: "smooth" });
+                }
+            }
+        }, 3000); // මිලි තත්පර 3000 = තත්පර 3
+
+        return () => clearInterval(intervalId);
+    }, [isHovered, projects]);
 
     return (
         <section id="portfolio" className="py-24 px-6 bg-gray-950 text-white overflow-hidden">
@@ -62,21 +90,24 @@ export default function Portfolio() {
                         No projects available yet. Add some from the Admin Panel!
                     </div>
                 ) : (
-                    /* අලුත් Portfolio Gallery Wrapper (Horizontal Scroll) */
-                    <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-10 pt-4 hide-scrollbar">
+                    /* Auto-scroll වෙන Portfolio Gallery Wrapper එක */
+                    <div 
+                        ref={scrollRef}
+                        onMouseEnter={() => setIsHovered(true)} // මවුස් එක ගෙනිච්චම නවතිනවා
+                        onMouseLeave={() => setIsHovered(false)} // අයින් කරාම ආයෙත් යනවා
+                        className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-10 pt-4 hide-scrollbar scroll-smooth"
+                    >
                         {projects.map((project, index) => (
                             <div 
                                 key={project.id} 
                                 data-aos="zoom-in-up" 
                                 data-aos-delay={index * 100} 
-                                // මෙතන තමයි අලුත් ඩිසයින් එකට අදාල කෑලි ටික තියෙන්නේ
-                                className="snap-center shrink-0 w-[85vw] md:w-[400px] h-full flex flex-col group relative overflow-hidden rounded-2xl bg-gray-900 border border-gray-800 shadow-xl"
+                                className="snap-center shrink-0 w-[85vw] md:w-[400px] h-full flex flex-col group relative overflow-hidden rounded-2xl bg-gray-900 border border-gray-800 shadow-xl cursor-pointer"
                             >
                                 <div className="aspect-video overflow-hidden relative bg-black">
                                     <img 
                                         src={project.imageUrl} 
                                         alt={project.title} 
-                                        // පින්තූරේ වැරදි ලින්ක් එකක් නම් default පින්තූරයක් පෙන්නන්න
                                         onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop" }}
                                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
                                     />
