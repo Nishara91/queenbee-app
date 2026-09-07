@@ -1,10 +1,9 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { collection, addDoc, serverTimestamp, getDocs, query, orderBy, deleteDoc, doc } from "firebase/firestore";
-// ඔයාගේ firebase.ts ෆයිල් එක තියෙන තැනට path එක හරියටම දෙන්න
+// updateDoc කියන එක අලුතින් එකතු කළා
+import { collection, addDoc, serverTimestamp, getDocs, query, orderBy, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase"; 
 
-// Project එකේ හැඩය 
 interface Project {
     id: string;
     title: string;
@@ -23,7 +22,13 @@ export default function AdminPage() {
     const [projects, setProjects] = useState<Project[]>([]);
     const [loadingProjects, setLoadingProjects] = useState(false);
 
-    // Database එකෙන් Projects ටික ඇදලා ගන්න ෆන්ක්ශන් එක
+    // --- Update කිරීම සඳහා අලුතින් එක්කල States ---
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [title, setTitle] = useState("");
+    const [category, setCategory] = useState("");
+    const [imageUrl, setImageUrl] = useState("");
+    const [description, setDescription] = useState("");
+
     const fetchProjects = async () => {
         setLoadingProjects(true);
         try {
@@ -43,66 +48,86 @@ export default function AdminPage() {
         }
     };
 
-    // ලොග් වුණාම ඉබේම Projects ටික ලෝඩ් වෙන්න
     useEffect(() => {
-        if (isLoggedIn) {
-            fetchProjects();
-        }
+        if (isLoggedIn) fetchProjects();
     }, [isLoggedIn]);
 
-    // Login වෙන කොටස
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
-        if (password === "admin123") {
-            setIsLoggedIn(true);
-        } else {
-            alert("Incorrect Password! Access Denied.");
-        }
+        if (password === "admin123") setIsLoggedIn(true);
+        else alert("Incorrect Password! Access Denied.");
     };
 
-    // අලුත් Project එකක් දාන කොටස
-    const handleAddProject = async (e: React.FormEvent<HTMLFormElement>) => {
+    // Form එකේ දත්ත සේව් කරන/අප්ඩේට් කරන කොටස
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setStatus({ text: "Adding project...", type: "loading" });
-
-        const form = e.currentTarget;
-        const formData = new FormData(form);
+        setStatus({ text: editingId ? "Updating project..." : "Adding project...", type: "loading" });
 
         try {
-            await addDoc(collection(db, "projects"), {
-                title: formData.get('title'),
-                category: formData.get('category'),
-                description: formData.get('description'),
-                imageUrl: formData.get('imageUrl'),
-                createdAt: serverTimestamp()
-            });
+            if (editingId) {
+                // පරණ එකක් Update කරනවා නම්
+                await updateDoc(doc(db, "projects", editingId), {
+                    title,
+                    category,
+                    description,
+                    imageUrl
+                });
+                setStatus({ text: "Project updated successfully! ✏️", type: "success" });
+            } else {
+                // අලුත්ම එකක් දානවා නම්
+                await addDoc(collection(db, "projects"), {
+                    title,
+                    category,
+                    description,
+                    imageUrl,
+                    createdAt: serverTimestamp()
+                });
+                setStatus({ text: "Project added successfully! 🎉", type: "success" });
+            }
 
-            setStatus({ text: "Project added successfully! 🎉", type: "success" });
-            form.reset();
-            
-            // අලුත් එක දැම්මට පස්සේ ලිස්ට් එක ආයෙත් අලුත් (Refresh) කරනවා
+            // වැඩේ ඉවර වුණාම Form එක හිස් කරලා ලිස්ට් එක අලුත් කරනවා
+            resetForm();
             fetchProjects();
 
             setTimeout(() => setStatus({ text: "", type: "" }), 3000);
             
         } catch (error) {
-            console.error("Error adding project: ", error);
-            setStatus({ text: "Failed to add project.", type: "error" });
+            console.error("Error saving project: ", error);
+            setStatus({ text: "Failed to save project.", type: "error" });
         }
     };
 
-    // Project එකක් මකන (Delete) කොටස
-    const handleDeleteProject = async (projectId: string) => {
-        // මකන්න කලින් ෂුවර් ද කියලා අහනවා
-        const isConfirmed = window.confirm("Are you sure you want to delete this project?");
+    // Edit බට්න් එක එබුවම Form එකට දත්ත පුරවන ෆන්ක්ශන් එක
+    const handleEditClick = (project: Project) => {
+        setTitle(project.title);
+        setCategory(project.category);
+        setImageUrl(project.imageUrl);
+        setDescription(project.description);
+        setEditingId(project.id);
         
+        // Form එක තියෙන තැනට උඩට ස්ක්‍රෝල් වෙනවා
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // Form එක හිස් කරන ෆන්ක්ශන් එක
+    const resetForm = () => {
+        setTitle("");
+        setCategory("");
+        setImageUrl("");
+        setDescription("");
+        setEditingId(null);
+    };
+
+    const handleDeleteProject = async (projectId: string) => {
+        const isConfirmed = window.confirm("Are you sure you want to delete this project?");
         if (isConfirmed) {
             try {
                 await deleteDoc(doc(db, "projects", projectId));
-                
-                // මැකුවට පස්සේ පේන ලිස්ට් එකෙන් ඒක අයින් කරනවා
                 setProjects(projects.filter(project => project.id !== projectId));
                 alert("Project deleted successfully! 🗑️");
+                
+                // මකන එක මේ වෙලාවේ Edit කර කර හිටිය එකක් නම් Form එකත් හිස් කරනවා
+                if (editingId === projectId) resetForm();
                 
             } catch (error) {
                 console.error("Error deleting project: ", error);
@@ -111,12 +136,10 @@ export default function AdminPage() {
         }
     };
 
-    // 1. ලොග් වෙලා නැත්නම් පෙන්නන Login Form එක
     if (!isLoggedIn) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-950 relative overflow-hidden" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2029&auto=format&fit=crop')" }}>
                 <div className="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
-                
                 <div className="relative z-10 w-full max-w-md p-10 bg-black/40 backdrop-blur-xl border border-gray-700/50 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.6)] mx-4">
                     <div className="text-center mb-10">
                         <h2 className="text-3xl font-extrabold text-white tracking-wide">
@@ -124,7 +147,6 @@ export default function AdminPage() {
                         </h2>
                         <p className="text-gray-400 text-sm mt-2">Secure access for authorized personnel</p>
                     </div>
-                    
                     <form onSubmit={handleLogin} className="space-y-6">
                         <div>
                             <label className="block text-sm font-semibold text-gray-300 mb-2">Password</label>
@@ -146,7 +168,6 @@ export default function AdminPage() {
         );
     }
 
-    // 2. ලොග් වුණාට පස්සේ පෙන්නන Admin Dashboard එක
     return (
         <div className="min-h-screen bg-gray-950 text-white p-6 md:p-12">
             <div className="max-w-7xl mx-auto">
@@ -159,30 +180,41 @@ export default function AdminPage() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     
-                    {/* වම් පැත්ත: Add Project Form එක */}
-                    <div className="lg:col-span-1 bg-gray-900 border border-gray-800 p-8 rounded-2xl shadow-xl h-fit">
-                        <h2 className="text-xl font-bold mb-6 text-yellow-500">Add New Project</h2>
+                    {/* වම් පැත්ත: Add/Edit Project Form එක */}
+                    <div className="lg:col-span-1 bg-gray-900 border border-gray-800 p-8 rounded-2xl shadow-xl h-fit transition-all duration-300" style={editingId ? { borderColor: '#ca8a04', boxShadow: '0 0 20px rgba(202, 138, 4, 0.1)' } : {}}>
+                        <h2 className="text-xl font-bold mb-6 text-yellow-500">
+                            {editingId ? "✏️ Edit Project" : "➕ Add New Project"}
+                        </h2>
                         
-                        <form onSubmit={handleAddProject} className="space-y-5">
+                        <form onSubmit={handleSubmit} className="space-y-5">
                             <div>
                                 <label className="block text-sm font-semibold text-gray-400 mb-2">Project Title</label>
-                                <input type="text" name="title" required className="w-full bg-black/50 border border-gray-700 rounded-lg p-3 text-white focus:border-yellow-500 focus:outline-none" placeholder="e.g. Saruketha Restaurant" />
+                                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required className="w-full bg-black/50 border border-gray-700 rounded-lg p-3 text-white focus:border-yellow-500 focus:outline-none" placeholder="e.g. Saruketha Restaurant" />
                             </div>
                             <div>
                                 <label className="block text-sm font-semibold text-gray-400 mb-2">Category</label>
-                                <input type="text" name="category" required className="w-full bg-black/50 border border-gray-700 rounded-lg p-3 text-white focus:border-yellow-500 focus:outline-none" placeholder="e.g. Local SEO" />
+                                <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} required className="w-full bg-black/50 border border-gray-700 rounded-lg p-3 text-white focus:border-yellow-500 focus:outline-none" placeholder="e.g. Local SEO" />
                             </div>
                             <div>
                                 <label className="block text-sm font-semibold text-gray-400 mb-2">Image URL</label>
-                                <input type="url" name="imageUrl" required className="w-full bg-black/50 border border-gray-700 rounded-lg p-3 text-white focus:border-yellow-500 focus:outline-none" placeholder="https://example.com/image.jpg" />
+                                <input type="url" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} required className="w-full bg-black/50 border border-gray-700 rounded-lg p-3 text-white focus:border-yellow-500 focus:outline-none" placeholder="https://example.com/image.jpg" />
                             </div>
                             <div>
                                 <label className="block text-sm font-semibold text-gray-400 mb-2">Description</label>
-                                <textarea name="description" rows={3} required className="w-full bg-black/50 border border-gray-700 rounded-lg p-3 text-white focus:border-yellow-500 focus:outline-none" placeholder="Short description..."></textarea>
+                                <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} required className="w-full bg-black/50 border border-gray-700 rounded-lg p-3 text-white focus:border-yellow-500 focus:outline-none" placeholder="Short description..."></textarea>
                             </div>
-                            <button type="submit" className="w-full bg-yellow-600 text-white font-bold py-3 rounded-lg hover:bg-yellow-500 transition-colors">
-                                Publish Project
-                            </button>
+                            
+                            <div className="flex space-x-3 pt-2">
+                                <button type="submit" className={`flex-1 text-white font-bold py-3 rounded-lg transition-colors ${editingId ? 'bg-blue-600 hover:bg-blue-500' : 'bg-yellow-600 hover:bg-yellow-500'}`}>
+                                    {editingId ? "Update Project" : "Publish Project"}
+                                </button>
+                                
+                                {editingId && (
+                                    <button type="button" onClick={resetForm} className="px-4 bg-gray-700 text-white font-bold rounded-lg hover:bg-gray-600 transition-colors">
+                                        Cancel
+                                    </button>
+                                )}
+                            </div>
 
                             {status.text && (
                                 <p className={`mt-2 text-center font-bold ${status.type === 'success' ? 'text-green-400' : 'text-red-400'}`}>
@@ -192,7 +224,7 @@ export default function AdminPage() {
                         </form>
                     </div>
 
-                    {/* දකුණු පැත්ත: Manage & Delete Projects කොටස */}
+                    {/* දකුණු පැත්ත: Manage Projects කොටස */}
                     <div className="lg:col-span-2 bg-gray-900 border border-gray-800 p-8 rounded-2xl shadow-xl">
                         <h2 className="text-xl font-bold mb-6 text-yellow-500">Manage Published Projects</h2>
                         
@@ -207,7 +239,6 @@ export default function AdminPage() {
                                 {projects.map((project) => (
                                     <div key={project.id} className="flex flex-col sm:flex-row justify-between items-center bg-black/50 border border-gray-700 rounded-xl p-4 hover:border-gray-500 transition-colors">
                                         
-                                        {/* Project Details */}
                                         <div className="flex items-center space-x-4 mb-4 sm:mb-0 w-full sm:w-auto">
                                             <div className="w-16 h-12 bg-gray-800 rounded-md overflow-hidden flex-shrink-0">
                                                 <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.src = "https://via.placeholder.com/150x100?text=No+Image" }} />
@@ -218,20 +249,28 @@ export default function AdminPage() {
                                             </div>
                                         </div>
 
-                                        {/* Delete Button */}
-                                        <button 
-                                            onClick={() => handleDeleteProject(project.id)}
-                                            className="w-full sm:w-auto px-5 py-2 bg-red-900/40 text-red-500 border border-red-900/50 rounded-lg hover:bg-red-600 hover:text-white transition-all font-semibold"
-                                        >
-                                            Delete
-                                        </button>
+                                        <div className="flex space-x-3 w-full sm:w-auto">
+                                            {/* අලුත් Edit බට්න් එක */}
+                                            <button 
+                                                onClick={() => handleEditClick(project)}
+                                                className="flex-1 sm:flex-none px-5 py-2 bg-blue-900/40 text-blue-400 border border-blue-900/50 rounded-lg hover:bg-blue-600 hover:text-white transition-all font-semibold"
+                                            >
+                                                Edit
+                                            </button>
+                                            {/* පරණ Delete බට්න් එක */}
+                                            <button 
+                                                onClick={() => handleDeleteProject(project.id)}
+                                                className="flex-1 sm:flex-none px-5 py-2 bg-red-900/40 text-red-500 border border-red-900/50 rounded-lg hover:bg-red-600 hover:text-white transition-all font-semibold"
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
 
                                     </div>
                                 ))}
                             </div>
                         )}
                     </div>
-
                 </div>
             </div>
         </div>
