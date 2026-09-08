@@ -49,11 +49,11 @@ export default function Hero() {
                         </div>
                         
                         {/* 
-                          * අලුත් Clickable Button Badge එක (සුදු පාට) 
-                          * active:scale-95 දාලා තියෙන නිසා ක්ලික් කරද්දි බට්න් එකක් වගේ ඔබෙනවා 
+                          * මෙන්න මෙතන තමයි වෙනස් වුණේ! 
+                          * href එක "/gallery" කියලා දැම්මා 
                         */}
                         <Link 
-                            href="#portfolio" 
+                            href="/gallery" 
                             data-aos="fade-up" 
                             data-aos-delay="500" 
                             className="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 bg-white pl-4 pr-5 py-3 md:py-4 rounded-2xl shadow-xl z-20 flex items-center gap-3 md:gap-4 group cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 active:scale-95 scale-90 md:scale-100 origin-bottom-left border border-gray-100 hover:border-yellow-300"
@@ -69,11 +69,10 @@ export default function Hero() {
                             <div className="flex flex-col text-left pr-1 md:pr-2">
                                 <p className="font-bold text-[14px] md:text-[15px] text-gray-900 leading-tight mb-0.5 group-hover:text-yellow-600 transition-colors">Trusted Agency</p>
                                 <p className="text-[11px] md:text-[12px] text-gray-500 font-medium leading-tight mb-1">100+ Projects Delivered</p>
-                                {/* Click to view text */}
                                 <p className="text-[10px] text-yellow-600 font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click to view work</p>
                             </div>
 
-                            {/* දකුණු පැත්තේ ඊතලය (Button Indicator) */}
+                            {/* දකුණු පැත්තේ ඊතලය */}
                             <div className="ml-auto bg-gray-50 border border-gray-200 p-1.5 md:p-2 rounded-full text-gray-400 group-hover:bg-yellow-500 group-hover:text-white group-hover:border-yellow-500 transition-all duration-300">
                                 <svg className="w-3 h-3 md:w-4 md:h-4 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
